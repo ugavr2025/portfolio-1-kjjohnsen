@@ -6,7 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes: []
   m_configObjects:
-    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 289c1b55c9541489481df5cc06664110, type: 3}
     com.unity.xr.arfoundation.simulation_settings: {fileID: 11400000, guid: 2428ab424915dab4eb147f761de48c17, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 70f375346c4e08b43bff2925e1df956f, type: 2}
     com.unity.xr.openxr.settings4: {fileID: 11400000, guid: 2519eac24fbe89245bb9cccc2564c2e7, type: 2}
