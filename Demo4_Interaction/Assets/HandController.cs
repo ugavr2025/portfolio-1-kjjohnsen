@@ -1,6 +1,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.XR;
@@ -18,7 +19,8 @@ public class HandController : MonoBehaviour
     [SerializeField] float goGoScale;
 
 	XRGrabbable grabbedObject;
-    List<XRGrabbable> grabbablesInTrigger = new List<XRGrabbable>();
+    Dictionary<XRGrabbable,List<Collider>> grabbablesInTrigger = new(); //this let's me have a list of XR grabbables that I can find based on a collider quickly
+   
     [SerializeField] InputAction grabAction;
     [SerializeField] InputAction handVelocity;
     [SerializeField] InputAction handAngularVelocity;
@@ -38,8 +40,7 @@ public class HandController : MonoBehaviour
     [SerializeField] bool useAirGrab = true;
     private bool isAirGrabbing = false;
     private Vector3 airGrabStartPositionWorld; //this is the basis for moving
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    private GameObject[] teleporterParts;
+
     [SerializeField] GameObject teleporterArcPrefab;
 	[SerializeField] float teleporterDt = .1f; //time between ray casts, effectively teleporter length
     GameObject[] arcPieces = new GameObject[50]; //how many ray casts, also teleporter length
@@ -63,7 +64,7 @@ public class HandController : MonoBehaviour
             //handle snap rotation & teleportation
             var stick = thumbstick.ReadValue<Vector2>();
 
-            if (Mathf.Abs(stick.x) < stickDeadZone && snapActive)
+            if (Mathf.Abs(stick.x) < stickDeadZone*.9f && snapActive)
             {
                 snapActive = false;
             }
@@ -78,7 +79,7 @@ public class HandController : MonoBehaviour
                 rig.Translate(footWorld - footWorldNew, Space.World); //move it back so that the head didn't move!
 
 			}
-            if (stick.y < stickDeadZone && teleportingActive)
+            if (stick.y < stickDeadZone*.9f && teleportingActive)
             {
                 teleportingActive = false;
 				foreach (var part in arcPieces)
@@ -127,19 +128,22 @@ public class HandController : MonoBehaviour
                     
 					if (hits.Length > 0) //we got a hit!
                     {
-                        teleportingValid = true; //we should be able to teleport now
-                        teleportingTarget = hits[0].point; //this is where we will teleport
-                        arcPieces[i].transform.localScale = new Vector3(1, 1, hits[0].distance); //we probably overshot the visualization a bit, so move it back
-
-                        //set the rest of the teleporter arc inactive
-                        for(var j = i + 1; j < arcPieces.Length; j++)
+                        if (hits[0].normal.y > .7f) //roughly vertical
                         {
-                            if (arcPieces[j] != null)
+                            teleportingValid = true; //we should be able to teleport now
+                            teleportingTarget = hits[0].point; //this is where we will teleport
+                            arcPieces[i].transform.localScale = new Vector3(1, 1, hits[0].distance); //we probably overshot the visualization a bit, so move it back
+
+                            //set the rest of the teleporter arc inactive
+                            for (var j = i + 1; j < arcPieces.Length; j++)
                             {
-                                arcPieces[j].SetActive(false);
+                                if (arcPieces[j] != null)
+                                {
+                                    arcPieces[j].SetActive(false);
+                                }
                             }
+                            break;
                         }
-                        break;
                     }
                     
                     v += a * teleporterDt; //compute the new velocity
@@ -168,9 +172,9 @@ public class HandController : MonoBehaviour
 		float grabber = grabAction.ReadValue<float>();
 
         
-		if (grabber > grabThreshold && grabbedObject == null && grabbablesInTrigger.Count > 0)
+		if (!isAirGrabbing && grabber > grabThreshold && grabbedObject == null && grabbablesInTrigger.Count > 0)
 		{
-			grabbedObject = grabbablesInTrigger[0];
+            grabbedObject = grabbablesInTrigger.FirstOrDefault().Key;
 			grabbedObject.Grab(this);
 			
 			var renderers = this.GetComponentsInChildren<Renderer>();
@@ -179,7 +183,7 @@ public class HandController : MonoBehaviour
 				r.enabled = false;
 			}
 		}
-		if (grabber <= grabThreshold && grabbedObject != null)
+		if (grabber <= grabThreshold*.9f && grabbedObject != null)
 		{
 			grabbedObject.Release(this, handVelocity.ReadValue<Vector3>(), handAngularVelocity.ReadValue<Vector3>());
 			var renderers = this.GetComponentsInChildren<Renderer>();
@@ -196,7 +200,7 @@ public class HandController : MonoBehaviour
                 isAirGrabbing = true;
                 airGrabStartPositionWorld = transform.position;
             }
-            if (grabber < grabThreshold && isAirGrabbing)
+            if (grabber < grabThreshold*.9f && isAirGrabbing)
             {
                 isAirGrabbing = false; //stop, maybe fling yourself
             }
@@ -231,22 +235,40 @@ public class HandController : MonoBehaviour
 
 	private void OnTriggerEnter(Collider other)
 	{
-        var grabbable = other.attachedRigidbody?.GetComponent<XRGrabbable>();
-		if (grabbable != null && !grabbablesInTrigger.Contains(grabbable))
-        {
-            grabbablesInTrigger.Add(grabbable);
-        }
-        grabbable?.OnHoverEnter(this);
+        var g = other.attachedRigidbody?.GetComponent<XRGrabbable>();
+		if (g!= null)
+		{
+            if (!grabbablesInTrigger.ContainsKey(g))
+            {
+                grabbablesInTrigger[g] = new List<Collider> {};
+				g.OnHoverEnter(this);
+			}
+            if (!grabbablesInTrigger[g].Contains(other))
+            {
+                grabbablesInTrigger [g].Add(other);
+            }
+		}
+		
+		
+        
 	}
 
 	private void OnTriggerExit(Collider other)
 	{
-		var grabbable = other.attachedRigidbody?.GetComponent<XRGrabbable>();
-		if (grabbable != null && grabbablesInTrigger.Contains(grabbable))
+		var g = other.attachedRigidbody?.GetComponent<XRGrabbable>();
+		if (g != null)
 		{
-            grabbablesInTrigger.Remove(grabbable);
+			if (grabbablesInTrigger.ContainsKey(g))
+			{
+                grabbablesInTrigger[g].Remove(other);
+			}
+			if (grabbablesInTrigger[g].Count == 0)
+			{
+                g.OnHoverExit(this);
+                grabbablesInTrigger.Remove(g); 
+			}
 		}
-        grabbable?.OnHoverExit(this);
+		
 	}
 
 
