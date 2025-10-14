@@ -35,8 +35,8 @@ MonoBehaviour:
   panelDistance: 1
   createEventSystem: 1
   automaticLayerCullingUpdate: 1
-  panelLayer: 20
-  meshRendererLayer: 21
+  panelLayer: 6
+  meshRendererLayer: 7
   overlayDepth: 10
   useOverlay: 1
   inspectedDataEnabled: 0101
