@@ -218,7 +218,7 @@ public class HandController : MonoBehaviour
 		if (vibration.controls.Count > 0)
 		{
 			//this may be the most generic way to rumble
-			(vibration.controls[0].device as XRControllerWithRumble).SendImpulse(magnitude, duration);
+			(vibration.controls[0].device as XRControllerWithRumble)?.SendImpulse(magnitude, duration);
 
 			//this does not work (vibrates both for some reason)
 			//OpenXRInput.SendHapticImpulse(vibration, 1, .01f); 
