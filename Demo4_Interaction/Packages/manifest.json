@@ -1,6 +1,8 @@
 {
   "dependencies": {
     "com.meta.xr.sdk.core": "78.0.0",
+    "com.unity.ai.navigation": "2.0.9",
+    "com.unity.cloud.gltfast": "6.14.1",
     "com.unity.collab-proxy": "2.9.3",
     "com.unity.feature.development": "1.0.2",
     "com.unity.inputsystem": "1.14.2",
@@ -12,6 +14,7 @@
     "com.unity.xr.management": "4.5.1",
     "com.unity.xr.meta-openxr": "2.3.0",
     "com.unity.xr.openxr": "1.15.1",
+    "edu.uga.engr.vel.velnet": "1.5.5",
     "com.unity.modules.accessibility": "1.0.0",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.androidjni": "1.0.0",
