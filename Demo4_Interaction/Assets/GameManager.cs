@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour
     public Transform hmd;
     public Transform leftHand;
     public Transform rightHand;
+    public Transform leftHandSkeleton;
+    public Transform rightHandSkeleton;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -23,6 +25,8 @@ public class GameManager : MonoBehaviour
             myAvatar.hmd = hmd;
             myAvatar.leftHand = leftHand;
             myAvatar.rightHand = rightHand;
+            myAvatar.leftHandSkeleton = leftHandSkeleton;
+            myAvatar.rightHandSkeleton = rightHandSkeleton;
         };
         
     }

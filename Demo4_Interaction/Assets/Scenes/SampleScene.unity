@@ -2289,6 +2289,8 @@ MonoBehaviour:
   hmd: {fileID: 782628380}
   leftHand: {fileID: 782628379}
   rightHand: {fileID: 782628378}
+  leftHandSkeleton: {fileID: 1834220594}
+  rightHandSkeleton: {fileID: 1769292097}
 --- !u!4 &744948199
 Transform:
   m_ObjectHideFlags: 0
@@ -3818,6 +3820,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: OpenXRCustomHandPrefab_L
       objectReference: {fileID: 0}
+    - target: {fileID: 5272262661847662301, guid: deccf1bd75222ab419fef0130b2a4d9e, type: 3}
+      propertyPath: _updateRootScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8661073797813907648, guid: deccf1bd75222ab419fef0130b2a4d9e, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5021,6 +5031,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1691312487}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &1769292097 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7715439802841928401, guid: f4f1f0ff232ea644c8a980e61825dd44, type: 3}
+  m_PrefabInstance: {fileID: 854905462}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1773297013
 GameObject:
   m_ObjectHideFlags: 0
@@ -5139,6 +5154,11 @@ Transform:
   - {fileID: 810137179}
   m_Father: {fileID: 782628377}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &1834220594 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8105417998198620699, guid: deccf1bd75222ab419fef0130b2a4d9e, type: 3}
+  m_PrefabInstance: {fileID: 1189762167}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1861961642
 GameObject:
   m_ObjectHideFlags: 0

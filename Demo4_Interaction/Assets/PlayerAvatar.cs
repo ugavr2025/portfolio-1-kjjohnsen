@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.XR.ARFoundation;
 using VelNet;
+using Meta.XR.Audio;
 
 public class PlayerAvatar : NetworkComponent,IPackState
 {
@@ -12,11 +13,14 @@ public class PlayerAvatar : NetworkComponent,IPackState
 	public Transform hmd; //will be null on non-owners
 	public Transform leftHand;
 	public Transform rightHand;
+	public Transform leftHandSkeleton;
+	public Transform rightHandSkeleton;
 
 	public Transform myHead;
-	public Transform myLeftHand;
-	public Transform myRightHand;
+	public AvatarHand myLeftHand;
+	public AvatarHand myRightHand;
 	private bool fixAvatar = true;
+	public AudioSource audioSource;
 	public byte[] PackState()
 	{
 		var ms = new MemoryStream();
@@ -50,10 +54,12 @@ public class PlayerAvatar : NetworkComponent,IPackState
 		{
 			myHead.position = hmd.position;
 			myHead.rotation = hmd.rotation;
-			myLeftHand.position = leftHand.position;
-			myRightHand.position = rightHand.position;
-			myLeftHand.rotation = leftHand.rotation;
-			myRightHand.rotation = rightHand.rotation;
+			myLeftHand.transform.position = leftHand.position;
+			myLeftHand.transform.rotation  = leftHand.rotation;
+			myRightHand.transform.position= rightHand.position;
+			myRightHand.transform.rotation= rightHand.rotation;
+			myLeftHand.trackedSkeleton = leftHandSkeleton;
+			myRightHand.trackedSkeleton = rightHandSkeleton;
 		}
 
 		//update the avatar
@@ -75,13 +81,13 @@ public class PlayerAvatar : NetworkComponent,IPackState
 
 			//}
 
-			////add ovr lip sync on the audio source for the player
-			//var olsc = audioSource.gameObject.AddComponent<OVRLipSyncContext>();
-			//olsc.audioSource = audioSource;
-			//olsc.audioLoopback = true;
-			//var morpher = audioSource.gameObject.AddComponent<OVRLipSyncContextMorphTarget>();
-			//morpher.skinnedMeshRenderer = rpmAvatar.GetComponentInChildren<SkinnedMeshRenderer>();
-			//morpher.visemeToBlendTargets = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
+			//add ovr lip sync on the audio source for the player
+			var olsc = audioSource.gameObject.AddComponent<OVRLipSyncContext>();
+			olsc.audioSource = audioSource;
+			olsc.audioLoopback = true;
+			var morpher = audioSource.gameObject.AddComponent<OVRLipSyncContextMorphTarget>();
+			morpher.skinnedMeshRenderer = rpmPlayerBody.GetComponentInChildren<SkinnedMeshRenderer>();
+			morpher.visemeToBlendTargets = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
 
 		}
 		var rpmBody = rpmPlayerBody.Find("AvatarRoot");
@@ -101,12 +107,12 @@ public class PlayerAvatar : NetworkComponent,IPackState
 		rpmHead.transform.position = headPosition;
 		rpmHead.transform.rotation = myHead.rotation;
 
-		//rpmLH.transform.localScale = Vector3.zero; //zero out the hands...we don't need them
-		//rpmRH.transform.localScale = Vector3.zero;
-		rpmLH.transform.position = myLeftHand.transform.position;
-		rpmLH.transform.rotation  = myLeftHand.transform.rotation;
-		rpmRH.transform.position = myRightHand.transform.position;
-		rpmRH.transform.rotation = myRightHand.transform.rotation;
+		rpmLH.transform.localScale = Vector3.zero; //zero out the hands...we don't need them
+		rpmRH.transform.localScale = Vector3.zero;
+		//rpmLH.transform.position = myLeftHand.transform.position;
+		//rpmLH.transform.rotation  = myLeftHand.transform.rotation;
+		//rpmRH.transform.position = myRightHand.transform.position;
+		//rpmRH.transform.rotation = myRightHand.transform.rotation;
 
 	}
 }
