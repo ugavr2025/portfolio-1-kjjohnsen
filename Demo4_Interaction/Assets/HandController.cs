@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.XR;
 using UnityEngine.XR.OpenXR.Input;
+using VelNet;
 
 public class HandController : MonoBehaviour
 {
@@ -175,6 +176,7 @@ public class HandController : MonoBehaviour
 		if (!isAirGrabbing && grabber > grabThreshold && grabbedObject == null && grabbablesInTrigger.Count > 0)
 		{
             grabbedObject = grabbablesInTrigger.FirstOrDefault().Key;
+            //grabbedObject.GetComponent<NetworkObject>()?.TakeOwnership();
 			grabbedObject.Grab(this);
 			
 			var renderers = this.GetComponentsInChildren<Renderer>();
@@ -185,7 +187,7 @@ public class HandController : MonoBehaviour
 		}
 		if (grabber <= grabThreshold*.9f && grabbedObject != null)
 		{
-			grabbedObject.Release(this, handVelocity.ReadValue<Vector3>(), handAngularVelocity.ReadValue<Vector3>());
+			grabbedObject.Release(this, rig.TransformDirection(handVelocity.ReadValue<Vector3>()), rig.TransformDirection(handAngularVelocity.ReadValue<Vector3>()));
 			var renderers = this.GetComponentsInChildren<Renderer>();
 			foreach (var r in renderers)
 			{

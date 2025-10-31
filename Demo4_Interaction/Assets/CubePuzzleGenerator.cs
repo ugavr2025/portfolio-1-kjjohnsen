@@ -1,18 +1,15 @@
 using System.Collections.Generic;
 using UnityEngine;
+using VelNet;
 
 public class CubePuzzleGenerator : MonoBehaviour
 {
 	public float cubeSideLength = .02f;
 	public int cubeSize = 3;                   // 3x3x3 puzzle
 	public int targetPieces = 6;               // Aim for ~6 puzzle pieces
-	public GameObject cubePrefab;              // Assign in Inspector (plain cube mesh)
-	public Material baseMaterial;              // Base material (cloned per piece)
 	public Transform[] spawnPoints;            // Assign 6 spawn locations in Inspector
-	public Material outlineMat;		   // How pieces will be outlined
 	private bool[,,] grid;                     // Occupied cubes
 	private List<List<Vector3Int>> pieces;     // Final puzzle pieces
-	public AudioClip hitClip;
 	void Start()
 	{
 		//GeneratePuzzle();
@@ -133,55 +130,20 @@ public class CubePuzzleGenerator : MonoBehaviour
 	{
 		for (int i = 0; i < pieces.Count; i++)
 		{
-			var piece = pieces[i];
-
-			// Parent object with Rigidbody and set up stuff for grabbing
-			GameObject parent = new GameObject("Piece_" + i);
-			var outline = parent.AddComponent<InvertedHullOutline>();
-			outline.outlineMaterial = outlineMat;
-			var grabbable = parent.AddComponent<XRGrabbable>();
-			grabbable.outline = outline;
-			grabbable.collisionSound = hitClip;
-			var puzzlePiece = parent.AddComponent<PuzzlePiece>();
-			puzzlePiece.solution = pieces[i];
-			
-			
-			parent.transform.localScale = cubeSideLength * Vector3.one;
-			Rigidbody rb = parent.GetComponent<Rigidbody>();
-			rb.mass = piece.Count;
-
-			// Assign random unique color
-			Material pieceMat = new Material(baseMaterial);
-			pieceMat.color = Random.ColorHSV(i / (float)pieces.Count, i/(float)pieces.Count, 0.7f, 1f, 0.7f, 1f);
-
-			// Build cubes in local space (center around origin)
-			Vector3 center = Vector3.zero;
-			foreach (var pos in piece)
-				center += (Vector3)pos;
-			center /= piece.Count;
-
-			foreach (var pos in piece)
-			{
-				Vector3 localPos = (Vector3)pos - center;
-				GameObject cube = Instantiate(cubePrefab, parent.transform);
-				cube.transform.localPosition = localPos;
-
-				if (!cube.TryGetComponent<BoxCollider>(out _))
-					cube.AddComponent<BoxCollider>();
-
-				Renderer r = cube.GetComponent<Renderer>();
-				if (r != null) r.material = pieceMat;
-
-				if (cube.TryGetComponent<Rigidbody>(out Rigidbody childRb))
-					Destroy(childRb);
-			}
+			PuzzlePiece piece = VelNetManager.NetworkInstantiate("PuzzlePiece", (no) => { 
+				PuzzlePiece p = no.GetComponent<PuzzlePiece>();
+				Color c = Random.ColorHSV(i / (float)pieces.Count, i / (float)pieces.Count, 0.7f, 1f, 0.7f, 1f);
+				p.InitializePiece(pieces[i], c, cubeSideLength);
+				
+				
+			}).GetComponent<PuzzlePiece>();
 
 			// --- Place at spawn location with random rotation ---
 			if (spawnPoints != null && spawnPoints.Length > 0)
 			{
 				Transform spawn = spawnPoints[i % spawnPoints.Length];
-				parent.transform.position = spawn.position;
-				parent.transform.rotation = Random.rotation;
+				piece.transform.position = spawn.position;
+				piece.transform.rotation = Random.rotation;
 			}
 		}
 	}
