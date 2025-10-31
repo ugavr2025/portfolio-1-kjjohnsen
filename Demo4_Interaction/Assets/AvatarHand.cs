@@ -7,6 +7,7 @@ public class AvatarHand : NetworkComponent
 {
     public Transform trackedSkeleton;
     public Transform avatarSkeleton;
+    public Renderer handRenderer;
 	public override void ReceiveBytes(byte[] message)
 	{
 		throw new System.NotImplementedException();
@@ -119,6 +120,7 @@ public class AvatarHand : NetworkComponent
                 SendRPC(nameof(RPCHandUpdate), false, ms.ToArray());
                 
                 avatarSkeleton.gameObject.SetActive(false); //we already see our hand
+                handRenderer.enabled = false;
             }
 
         }

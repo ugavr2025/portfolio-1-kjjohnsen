@@ -100,7 +100,7 @@ MonoBehaviour:
   grabbedBy: {fileID: 0}
   rb: {fileID: 0}
   highlightMaterial: {fileID: 0}
-  outline: {fileID: 0}
+  outline: {fileID: 2112009036601795443}
   collisionSound: {fileID: 8300000, guid: 04e53d07b53dcd540ad38813c3e65496, type: 3}
 --- !u!114 &2501231506273824229
 MonoBehaviour:
@@ -115,12 +115,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   networkObject: {fileID: -9014822633726114828}
-  solution: []
   solutionChecker: {fileID: 0}
   blockMaterial: {fileID: 2100000, guid: c2a4c446718b1b640b9150e1541b2416, type: 2}
   cubePrefab: {fileID: 8605954488432178059, guid: 38d689e4f032c9d489adec044bd1651d, type: 3}
   piece: []
   color: {r: 0, g: 0, b: 0, a: 0}
+  cubeSideLength: 0
 --- !u!114 &1536510734903499411
 MonoBehaviour:
   m_ObjectHideFlags: 0

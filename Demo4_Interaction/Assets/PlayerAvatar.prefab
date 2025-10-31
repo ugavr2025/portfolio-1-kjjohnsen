@@ -223,6 +223,7 @@ MonoBehaviour:
   networkObject: {fileID: 5875399459476230025}
   trackedSkeleton: {fileID: 0}
   avatarSkeleton: {fileID: 6064944382082140479}
+  handRenderer: {fileID: 6657842844051061732}
 --- !u!1 &8505786044022892553
 GameObject:
   m_ObjectHideFlags: 0
@@ -422,6 +423,7 @@ MonoBehaviour:
   networkObject: {fileID: 5875399459476230025}
   trackedSkeleton: {fileID: 0}
   avatarSkeleton: {fileID: 5559821420569618080}
+  handRenderer: {fileID: 6720011665726556614}
 --- !u!1001 &23088149754532719
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -568,6 +570,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8105417998198620699, guid: deccf1bd75222ab419fef0130b2a4d9e, type: 3}
   m_PrefabInstance: {fileID: 2618623769243945764}
   m_PrefabAsset: {fileID: 0}
+--- !u!137 &6657842844051061732 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 8661073797813907648, guid: deccf1bd75222ab419fef0130b2a4d9e, type: 3}
+  m_PrefabInstance: {fileID: 2618623769243945764}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7852880000283099903 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5236614002125752795, guid: deccf1bd75222ab419fef0130b2a4d9e, type: 3}
@@ -663,6 +670,11 @@ PrefabInstance:
 --- !u!4 &5559821420569618080 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7715439802841928401, guid: f4f1f0ff232ea644c8a980e61825dd44, type: 3}
+  m_PrefabInstance: {fileID: 2754737875624227953}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &6720011665726556614 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 8897015553105444279, guid: f4f1f0ff232ea644c8a980e61825dd44, type: 3}
   m_PrefabInstance: {fileID: 2754737875624227953}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &9092956967950019758 stripped

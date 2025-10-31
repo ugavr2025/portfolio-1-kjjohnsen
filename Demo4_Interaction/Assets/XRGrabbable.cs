@@ -12,7 +12,6 @@ public class XRGrabbable : MonoBehaviour
 	public HandController grabbedBy;
 	public Rigidbody rb;
 
-    public Material highlightMaterial;
     public InvertedHullOutline outline;
 
     public Action released; //called when completely released (free-fall)
