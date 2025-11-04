@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.endel.nativewebsocket": "https://github.com/endel/NativeWebSocket.git#upm",
     "com.meta.xr.sdk.audio": "78.0.0",
     "com.meta.xr.sdk.core": "78.0.0",
     "com.unity.ai.navigation": "2.0.9",
@@ -9,6 +10,7 @@
     "com.unity.inputsystem": "1.14.2",
     "com.unity.mobile.android-logcat": "1.4.6",
     "com.unity.multiplayer.center": "1.0.0",
+    "com.unity.nuget.newtonsoft-json": "3.2.2",
     "com.unity.timeline": "1.8.9",
     "com.unity.ugui": "2.0.0",
     "com.unity.visualscripting": "1.9.7",
@@ -16,6 +18,7 @@
     "com.unity.xr.meta-openxr": "2.3.0",
     "com.unity.xr.openxr": "1.15.1",
     "edu.uga.engr.vel.velnet": "1.5.7",
+    "edu.uga.engr.vel.velshareunity": "1.1.0",
     "com.unity.modules.accessibility": "1.0.0",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.androidjni": "1.0.0",

@@ -99,7 +99,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grabbedBy: {fileID: 0}
   rb: {fileID: 0}
-  highlightMaterial: {fileID: 0}
   outline: {fileID: 2112009036601795443}
   collisionSound: {fileID: 8300000, guid: 04e53d07b53dcd540ad38813c3e65496, type: 3}
 --- !u!114 &2501231506273824229
@@ -146,7 +145,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   networkObject: {fileID: -9014822633726114828}
-  serializationRateHz: 30
+  serializationRateHz: 72
   hybridOnChangeCompression: 0
   useLocalTransform: 0
   minPosDelta: 0.01
