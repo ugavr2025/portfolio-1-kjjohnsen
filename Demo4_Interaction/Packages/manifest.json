@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "com.endel.nativewebsocket": "https://github.com/endel/NativeWebSocket.git#upm",
+    "com.itisnajim.socketiounity": "https://github.com/itisnajim/SocketIOUnity.git",
     "com.meta.xr.sdk.audio": "78.0.0",
     "com.meta.xr.sdk.core": "78.0.0",
     "com.unity.ai.navigation": "2.0.9",

@@ -127,8 +127,6 @@ public class OVRLipSyncContextMorphTarget : MonoBehaviour
                 SetLaughterToMorphTarget(frame);
             }
 
-            // TEST visemes by capturing key inputs and sending a signal
-            CheckForKeys();
 
             // Update smoothing value
             if (smoothAmount != lipsyncContext.Smoothing)
@@ -141,18 +139,7 @@ public class OVRLipSyncContextMorphTarget : MonoBehaviour
     /// <summary>
     /// Sends the signals.
     /// </summary>
-    void CheckForKeys()
-    {
-        if (enableVisemeTestKeys)
-        {
-            for (int i = 0; i < OVRLipSync.VisemeCount; ++i)
-            {
-                CheckVisemeKey(visemeTestKeys[i], i, 100);
-            }
-        }
-
-        CheckLaughterKey();
-    }
+   
 
     /// <summary>
     /// Sets the viseme to morph target.
@@ -192,36 +179,6 @@ public class OVRLipSyncContextMorphTarget : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Sends the viseme signal.
-    /// </summary>
-    /// <param name="key">Key.</param>
-    /// <param name="viseme">Viseme.</param>
-    /// <param name="arg1">Arg1.</param>
-    void CheckVisemeKey(KeyCode key, int viseme, int amount)
-    {
-        if (Input.GetKeyDown(key))
-        {
-            lipsyncContext.SetVisemeBlend(visemeToBlendTargets[viseme], amount);
-        }
-        if (Input.GetKeyUp(key))
-        {
-            lipsyncContext.SetVisemeBlend(visemeToBlendTargets[viseme], 0);
-        }
-    }
-
-    /// <summary>
-    /// Sends the laughter signal.
-    /// </summary>
-    void CheckLaughterKey()
-    {
-        if (Input.GetKeyDown(laughterKey))
-        {
-            lipsyncContext.SetLaughterBlend(100);
-        }
-        if (Input.GetKeyUp(laughterKey))
-        {
-            lipsyncContext.SetLaughterBlend(0);
-        }
-    }
+    
+    
 }
