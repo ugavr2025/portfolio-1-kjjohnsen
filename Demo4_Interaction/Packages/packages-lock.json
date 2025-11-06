@@ -16,6 +16,18 @@
       },
       "hash": "00e176cdc31b1cd06bdc556ac919f9bcd166d7ee"
     },
+    "com.meta.xr.mrutilitykit": {
+      "version": "81.0.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.ai.navigation": "1.1.4",
+        "com.unity.nuget.newtonsoft-json": "3.0.2",
+        "com.meta.xr.sdk.core": "81.0.0",
+        "com.unity.textmeshpro": "3.0.6"
+      },
+      "url": "https://npm.developer.oculus.com"
+    },
     "com.meta.xr.sdk.audio": {
       "version": "78.0.0",
       "depth": 0,
@@ -24,8 +36,8 @@
       "url": "https://npm.developer.oculus.com"
     },
     "com.meta.xr.sdk.core": {
-      "version": "78.0.0",
-      "depth": 0,
+      "version": "81.0.0",
+      "depth": 1,
       "source": "registry",
       "dependencies": {},
       "url": "https://npm.developer.oculus.com"
@@ -214,6 +226,14 @@
       },
       "url": "https://packages.unity.com"
     },
+    "com.unity.textmeshpro": {
+      "version": "5.0.0",
+      "depth": 1,
+      "source": "builtin",
+      "dependencies": {
+        "com.unity.ugui": "2.0.0"
+      }
+    },
     "com.unity.timeline": {
       "version": "1.8.9",
       "depth": 0,
@@ -342,6 +362,23 @@
       },
       "url": "https://packages.unity.com"
     },
+    "com.uralstech.utils.singleton": {
+      "version": "1.2.1",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://package.openupm.com"
+    },
+    "com.uralstech.uxr.questcamera": {
+      "version": "2.6.1",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.uralstech.utils.singleton": "1.2.1",
+        "com.unity.modules.androidjni": "1.0.0"
+      },
+      "url": "https://package.openupm.com"
+    },
     "edu.uga.engr.vel.velnet": {
       "version": "1.5.7",
       "depth": 0,
@@ -357,6 +394,15 @@
         "com.unity.webrtc": "3.0.0"
       },
       "url": "https://npm.ugavel.com"
+    },
+    "jp.keijiro.apriltag": {
+      "version": "1.0.2",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.burst": "1.6.5"
+      },
+      "url": "https://registry.npmjs.com"
     },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",

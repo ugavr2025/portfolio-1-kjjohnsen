@@ -382,7 +382,7 @@ public class VelAIManager : MonoBehaviour
 		sendMessage.voice_mode = voice_mode;
 		sendMessage.generation_mode = generation_mode;
 		sendMessage.transcribe_only = transcribe_only; 
-		socketIOClient.Emit("chat_message", sendMessage);
+		socketIOClient.Emit("chat_ message", sendMessage);
 
 	}
 

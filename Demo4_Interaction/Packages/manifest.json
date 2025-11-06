@@ -2,6 +2,7 @@
   "dependencies": {
     "com.endel.nativewebsocket": "https://github.com/endel/NativeWebSocket.git#upm",
     "com.itisnajim.socketiounity": "https://github.com/itisnajim/SocketIOUnity.git",
+    "com.meta.xr.mrutilitykit": "81.0.0",
     "com.meta.xr.sdk.audio": "78.0.0",
     "com.meta.xr.sdk.core": "78.0.0",
     "com.unity.ai.navigation": "2.0.9",
@@ -18,8 +19,10 @@
     "com.unity.xr.management": "4.5.1",
     "com.unity.xr.meta-openxr": "2.3.0",
     "com.unity.xr.openxr": "1.15.1",
+    "com.uralstech.uxr.questcamera": "2.6.1",
     "edu.uga.engr.vel.velnet": "1.5.7",
     "edu.uga.engr.vel.velshareunity": "1.1.0",
+    "jp.keijiro.apriltag": "1.0.2",
     "com.unity.modules.accessibility": "1.0.0",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.androidjni": "1.0.0",
@@ -66,6 +69,20 @@
       "url": "https://npm.developer.oculus.com",
       "scopes": [
         "com.meta"
+      ]
+    },
+    {
+      "name": "Keijiro",
+      "url": "https://registry.npmjs.com",
+      "scopes": [
+        "jp.keijiro"
+      ]
+    },
+    {
+      "name": "Uralstech",
+      "url": "https://package.openupm.com",
+      "scopes": [
+        "com.uralstech"
       ]
     }
   ]
