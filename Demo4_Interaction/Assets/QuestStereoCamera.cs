@@ -1,46 +1,38 @@
+using Meta.XR;
+using System;
 using UnityEngine;
 using UnityEngine.Android;
 using Uralstech.UXR.QuestCamera;
 using VELShareUnity;
 
-
 public class QuestStereoCamera : MonoBehaviour
 {
 	public WebRTCReceiver sender;
-	CameraDevice deviceLeft;
-	CaptureSessionObject<ContinuousCaptureSession> captureSessionLeft;
-	CameraDevice deviceRight;
-	CaptureSessionObject<ContinuousCaptureSession> captureSessionRight;
+	public PassthroughCameraAccess leftPassthrough;
+	public PassthroughCameraAccess rightPassthrough;
+	PassthroughCameraAccess.CameraIntrinsics leftIntrinsics;
+	PassthroughCameraAccess.CameraIntrinsics rightIntrinsics;
 
 	public Material combineMaterial;
 	public Texture texture1;
 	public Texture texture2;
 	public RenderTexture combinedTexture;
 	public Shader combineShader;
+	public int width = 1280;
+	public int height = 960;
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
-	async void Start()
+	void Start()
     {
 
-		if (!Permission.HasUserAuthorizedPermission(UCameraManager.HeadsetCameraPermission))
-			Permission.RequestUserPermission(UCameraManager.HeadsetCameraPermission);
-		deviceLeft = UCameraManager.Instance.OpenCamera(UCameraManager.Instance.GetCamera(CameraInfo.CameraEye.Left));
-		await deviceLeft.WaitForInitializationAsync();
+		//leftPassthrough = gameObject.AddComponent<PassthroughCameraAccess>();
+		//leftPassthrough.CameraPosition = PassthroughCameraAccess.CameraPositionType.Left;
+		//leftPassthrough.RequestedResolution = new Vector2Int(1280, 960);
 
-		deviceRight = UCameraManager.Instance.OpenCamera(UCameraManager.Instance.GetCamera(CameraInfo.CameraEye.Right));
-		await deviceRight.WaitForInitializationAsync();
+		//rightPassthrough = gameObject.AddComponent<PassthroughCameraAccess>();
+		//rightPassthrough.CameraPosition = PassthroughCameraAccess.CameraPositionType.Right;
+		//rightPassthrough.RequestedResolution = new Vector2Int(1280, 960);
 
-		Resolution r = new Resolution();
-		r.width = 640;
-		r.height = 480;
-
-		captureSessionLeft = deviceLeft.CreateContinuousCaptureSession(r);
-		await captureSessionLeft.CaptureSession.WaitForInitializationAsync();
-		texture1 = captureSessionLeft.TextureConverter.FrameRenderTexture;
-
-		captureSessionRight = deviceRight.CreateContinuousCaptureSession(r);
-		await captureSessionRight.CaptureSession.WaitForInitializationAsync();
-		texture2 = captureSessionRight.TextureConverter.FrameRenderTexture;
 
 		if (combineShader == null)
 		{
@@ -53,30 +45,47 @@ public class QuestStereoCamera : MonoBehaviour
 			combineMaterial = new Material(combineShader);
 		}
 
-		// Ensure textures are assigned before proceeding
-		if (texture1 == null || texture2 == null)
-		{
-			Debug.LogError("Please assign both source textures in the Inspector.");
-			enabled = false;
-			return;
-		}
-
-		// Create the destination RenderTexture
-		int width = texture1.width;
-		int height = texture1.height;
-		combinedTexture = new RenderTexture(width * 2, height, 0, UnityEngine.Experimental.Rendering.GraphicsFormat.B8G8R8A8_SRGB); // No depth buffer needed
-		sender.renderTexture = combinedTexture;
-		sender.Startup(sender.streamRoom);
+		combinedTexture = new RenderTexture(width * 2/4, height/4, 0, UnityEngine.Experimental.Rendering.GraphicsFormat.B8G8R8A8_SRGB); // No depth buffer needed
+		//sender.renderTexture = combinedTexture;
+		//sender.Startup(sender.streamRoom);
 	}
 
     // Update is called once per frame
     void Update()
     {
+
+		if (leftPassthrough.enabled)
+		{
+			texture1 = leftPassthrough.GetTexture();
+		}
+		if(rightPassthrough.enabled)
+		{
+			texture2 = rightPassthrough.GetTexture();
+		}
+
+		// Wait until PassthroughCameraAccess.IsPlaying is true
+		if (leftPassthrough.IsPlaying && rightPassthrough.IsPlaying)
+		{
+			// Camera data is available only when IsPlaying is true
+			leftIntrinsics = leftPassthrough.Intrinsics;
+			rightIntrinsics = rightPassthrough.Intrinsics;
+			Pose poseLeft = leftPassthrough.GetCameraPose();
+			Pose poseRight = rightPassthrough.GetCameraPose();
+			//Debug.Log("position left ="+poseLeft.position);
+			//Debug.Log("rotation left ="+poseLeft.rotation);
+			//Debug.Log("position right =" + poseRight.position);
+			//Debug.Log("rotation right =" + poseRight.rotation);
+			
+			DateTime timestamp = leftPassthrough.Timestamp;
+			//Debug.Log(timestamp);
+		}
+
 		// Ensure everything is still valid before blitting
 		if (combineMaterial == null || texture1 == null || texture2 == null)
 		{
 			return;
 		}
+
 
 		// Set the two source textures on our material
 		combineMaterial.SetTexture("_MainTex", texture1);
