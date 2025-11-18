@@ -10,16 +10,15 @@ public class QuestStereoCamera : MonoBehaviour
 	public WebRTCReceiver sender;
 	public PassthroughCameraAccess leftPassthrough;
 	public PassthroughCameraAccess rightPassthrough;
-	PassthroughCameraAccess.CameraIntrinsics leftIntrinsics;
-	PassthroughCameraAccess.CameraIntrinsics rightIntrinsics;
+	public PassthroughCameraAccess.CameraIntrinsics leftIntrinsics;
+	public PassthroughCameraAccess.CameraIntrinsics rightIntrinsics;
 
 	public Material combineMaterial;
 	public Texture texture1;
 	public Texture texture2;
 	public RenderTexture combinedTexture;
 	public Shader combineShader;
-	public int width = 1280;
-	public int height = 960;
+
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
@@ -44,7 +43,8 @@ public class QuestStereoCamera : MonoBehaviour
 		{
 			combineMaterial = new Material(combineShader);
 		}
-
+		int width = leftPassthrough.RequestedResolution.x;
+		int height = leftPassthrough.RequestedResolution.y;
 		combinedTexture = new RenderTexture(width * 2/4, height/4, 0, UnityEngine.Experimental.Rendering.GraphicsFormat.B8G8R8A8_SRGB); // No depth buffer needed
 		//sender.renderTexture = combinedTexture;
 		//sender.Startup(sender.streamRoom);
@@ -66,6 +66,7 @@ public class QuestStereoCamera : MonoBehaviour
 		// Wait until PassthroughCameraAccess.IsPlaying is true
 		if (leftPassthrough.IsPlaying && rightPassthrough.IsPlaying)
 		{
+			
 			// Camera data is available only when IsPlaying is true
 			leftIntrinsics = leftPassthrough.Intrinsics;
 			rightIntrinsics = rightPassthrough.Intrinsics;
@@ -94,5 +95,10 @@ public class QuestStereoCamera : MonoBehaviour
 		// Perform the blit operation
 		// The 'null' source means we are just running a fullscreen shader pass
 		Graphics.Blit(null, combinedTexture, combineMaterial);
+	}
+
+	public Vector3 getWorldPosition(Vector3 cameraPosition, bool left)
+	{
+		return Vector3.zero;
 	}
 }

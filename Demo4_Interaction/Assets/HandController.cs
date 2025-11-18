@@ -1,18 +1,17 @@
 
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.XR;
-using UnityEngine.XR.OpenXR.Input;
-using VelNet;
 
 public class HandController : MonoBehaviour
 {
     [SerializeField] Transform head;
-    [SerializeField] Transform controller;
-    [SerializeField] Transform rig;
+    [SerializeField] Transform controller; 
+	[SerializeField] OVRHand hand;
+	[SerializeField] Transform rig;
+
 
 
 	[SerializeField] bool useGoGo = true;
@@ -58,8 +57,10 @@ public class HandController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        bool handTracked = hand.IsTracked && hand.IsPointerPoseValid;
+        hand.GetComponentInChildren<SkinnedMeshRenderer>().enabled = handTracked;
 
-		
+
 		if (useTeleport)
         {
             //handle snap rotation & teleportation
@@ -171,6 +172,11 @@ public class HandController : MonoBehaviour
         }
 
 		float grabber = grabAction.ReadValue<float>();
+
+        if (handTracked)
+        {
+            grabber = hand.GetFingerIsPinching(OVRHand.HandFinger.Index) ? 1 : 0;
+        }
 
         
 		if (!isAirGrabbing && grabber > grabThreshold && grabbedObject == null && grabbablesInTrigger.Count > 0)

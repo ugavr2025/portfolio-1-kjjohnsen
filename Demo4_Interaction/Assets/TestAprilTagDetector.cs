@@ -15,8 +15,10 @@ public class TestAprilTagDetector : MonoBehaviour
 	[SerializeField] int _decimation = 4;
 	[SerializeField] float _tagSize = 0.05f;
 	[SerializeField] Material _tagMaterial = null;
-	[SerializeField] QuestStereoCamera QuestStereoCamera;
-
+	[SerializeField] QuestStereoCamera questStereoCamera;
+	[SerializeField] Transform tag0;
+	[SerializeField] Transform tag1;
+	[SerializeField] Transform rig;
 	private TagDetector _detector;
 
 	// --- Threading & Buffering ---
@@ -33,9 +35,11 @@ public class TestAprilTagDetector : MonoBehaviour
 	private readonly List<TagPose> _detectedTags = new List<TagPose>();
 	private readonly List<TagPose> _tagsForVisualization = new List<TagPose>();
 	private readonly object _tagLock = new object();
-
+	float fov_y=70;
+	
 	void Start()
 	{
+		
 		_cts = new CancellationTokenSource();
 		_processingTask = Task.Run(() => ProcessingLoop(_cts.Token), _cts.Token);
 	}
@@ -54,11 +58,12 @@ public class TestAprilTagDetector : MonoBehaviour
 	void LateUpdate()
 	{
 		// 1. Initialize detector
-		if (_detector == null && QuestStereoCamera.texture1 != null)
+		if (_detector == null && questStereoCamera.texture1 != null)
 		{
+			fov_y = 2 * Mathf.Atan(questStereoCamera.leftIntrinsics.SensorResolution.y / (2 * questStereoCamera.leftIntrinsics.FocalLength.y)); 
 			Debug.Log("Initializing AprilTag Detector");
-			int width = QuestStereoCamera.texture1.width;
-			int height = QuestStereoCamera.texture1.height;
+			int width = questStereoCamera.texture1.width;
+			int height = questStereoCamera.texture1.height;
 			_detector = new TagDetector(width, height, _decimation);
 			_bufferSize = width * height;
 		}
@@ -68,7 +73,7 @@ public class TestAprilTagDetector : MonoBehaviour
 		// 2. Check pipeline state and request frame
 		if (Interlocked.CompareExchange(ref _pipelineState, 1, 0) == 0)
 		{
-			AsyncGPUReadback.Request(QuestStereoCamera.texture1, 0, OnReadbackComplete);
+			AsyncGPUReadback.Request(questStereoCamera.texture1, 0, OnReadbackComplete);
 		}
 
 		// 3. Visualize results
@@ -126,7 +131,7 @@ public class TestAprilTagDetector : MonoBehaviour
 				try
 				{
 					var span = new ReadOnlySpan<Color32>(buffer);
-					_detector.ProcessImage(span, 70, _tagSize);
+					_detector.ProcessImage(span, fov_y, _tagSize);
 
 					threadLocalTagList.Clear();
 					threadLocalTagList.AddRange(_detector.DetectedTags); // This is the list of TagPose
@@ -169,10 +174,20 @@ public class TestAprilTagDetector : MonoBehaviour
 		foreach (var tagPose in _tagsForVisualization)
 		{
 			// Assuming TagPose has an 'ID' property, as 'Tag' does.
-			Debug.Log($"[Main Thread] Detected Tag ID: {tagPose.ID} at Pos: {tagPose.Position}");
+			Debug.Log($"[Main Thread] Detected Tag ID: {tagPose.ID} at Pos: {tagPose.Position} and Rot: {tagPose.Rotation}");
+			
+			Matrix4x4 leftCameraTransform = rig.localToWorldMatrix*Matrix4x4.TRS(questStereoCamera.leftPassthrough.GetCameraPose().position, questStereoCamera.leftPassthrough.GetCameraPose().rotation, Vector3.one);
+			if (tagPose.ID == 1)
+			{
+				tag1.position = leftCameraTransform.MultiplyPoint(tagPose.Position);
+				tag1.rotation = rig.rotation*questStereoCamera.leftPassthrough.GetCameraPose().rotation * tagPose.Rotation;
+			}
+			if (tagPose.ID == 0)
+			{
+				tag0.position = leftCameraTransform.MultiplyPoint(tagPose.Position);
+				tag0.rotation = rig.rotation*questStereoCamera.leftPassthrough.GetCameraPose().rotation * tagPose.Rotation;
+			}
 
-			// You can now also access tagPose.Position and tagPose.Rotation
-			// for your visualization logic.
 		}
 	}
 }
