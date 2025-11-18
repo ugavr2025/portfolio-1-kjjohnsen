@@ -134,18 +134,18 @@ public class AlignmentManager : MonoBehaviour
 		{
 			
 			Matrix4x4 leftCameraTransform = rig.localToWorldMatrix * Matrix4x4.TRS(questCamera.leftPassthrough.GetCameraPose().position, questCamera.leftPassthrough.GetCameraPose().rotation, Vector3.one);
-            Quaternion leftCameraRotation = questCamera.leftPassthrough.GetCameraPose().rotation;
+            Quaternion leftCameraRotation = rig.rotation * questCamera.leftPassthrough.GetCameraPose().rotation;
 			if (tagPose.ID == 0)
 			{
 				origin.position = leftCameraTransform.MultiplyPoint(tagPose.Position);
-				origin.rotation = rig.rotation * leftCameraRotation * tagPose.Rotation;
+				origin.rotation = leftCameraRotation * tagPose.Rotation;
                 found_origin = true;
 			}
 
 			if (tagPose.ID == 1)
 			{
 				target.position = leftCameraTransform.MultiplyPoint(tagPose.Position);
-				target.rotation = rig.rotation * leftCameraRotation * tagPose.Rotation;
+				target.rotation = leftCameraRotation * tagPose.Rotation;
                 found_target = true;
 			}
 
