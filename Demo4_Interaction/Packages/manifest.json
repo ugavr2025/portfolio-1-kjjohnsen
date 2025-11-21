@@ -6,6 +6,7 @@
     "com.meta.xr.sdk.audio": "78.0.0",
     "com.meta.xr.sdk.core": "78.0.0",
     "com.unity.ai.navigation": "2.0.9",
+    "com.unity.animation.rigging": "1.3.1",
     "com.unity.cloud.gltfast": "6.14.1",
     "com.unity.collab-proxy": "2.9.3",
     "com.unity.feature.development": "1.0.2",
